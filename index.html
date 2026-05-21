@@ -22,10 +22,11 @@ body{
   justify-content:center;
   align-items:center;
   flex-direction:column;
+  overflow:hidden;
 }
 
 h1{
-  font-size:60px;
+  font-size:70px;
   margin-bottom:10px;
 }
 
@@ -40,11 +41,34 @@ h1{
   border-radius:20px;
   cursor:pointer;
   transition:.05s;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  user-select:none;
+  -webkit-user-drag:none;
 }
 
 #friend:active{
   transform:scale(.97);
+}
+
+.pop{
+  position:absolute;
+  font-size:40px;
+  font-weight:bold;
+  color:#ff1493;
+  animation:float .6s forwards;
+  pointer-events:none;
+}
+
+@keyframes float{
+  0%{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  100%{
+    opacity:0;
+    transform:translateY(-80px);
+  }
 }
 
 </style>
@@ -55,6 +79,7 @@ h1{
 
 <div id="score">0</div>
 
+<!-- รูปปากปิด -->
 <img src="friend-close.jpg" id="friend">
 
 <script>
@@ -64,7 +89,7 @@ let score = 0;
 const friend = document.getElementById("friend");
 const scoreEl = document.getElementById("score");
 
-function pop(){
+function pop(x,y){
 
   score++;
   scoreEl.innerText = score;
@@ -100,18 +125,34 @@ function pop(){
 
   osc.stop(ctx.currentTime + 0.08);
 
-  // กลับเป็นปากปิด
+  // POP TEXT
+  const text = document.createElement("div");
+
+  text.className = "pop";
+  text.innerText = "POP!";
+  text.style.left = x + "px";
+  text.style.top = y + "px";
+
+  document.body.appendChild(text);
+
+  setTimeout(()=>{
+    text.remove();
+  },600);
+
+  // กลับเป็นรูปปากปิด
   setTimeout(()=>{
     friend.src = "friend-close.jpg";
   },80);
 
 }
 
-friend.addEventListener("click", pop);
+friend.addEventListener("click",(e)=>{
+  pop(e.clientX,e.clientY);
+});
 
 window.addEventListener("keydown",(e)=>{
   if(e.code === "Space"){
-    pop();
+    pop(window.innerWidth/2,window.innerHeight/2);
   }
 });
 
