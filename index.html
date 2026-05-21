@@ -1,321 +1,52 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Doujin Pop</title>
+<title>DOUJIN POP</title>
 
+<link rel="stylesheet" href="style.css">
+
+<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 
-<style>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  font-family:'Fredoka',sans-serif;
-  height:100vh;
-  overflow:hidden;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-
-  background:
-  radial-gradient(circle at top,#8ed6ff,#61b8ff,#419dff);
-
-  color:white;
-}
-
-/* กล่องเกม */
-
-.game-box{
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(12px);
-
-  border:2px solid rgba(255,255,255,.2);
-
-  padding:30px;
-  border-radius:35px;
-
-  box-shadow:
-  0 15px 40px rgba(0,0,0,.25);
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  width:420px;
-  max-width:90%;
-}
-
-/* TITLE */
-
-h1{
-  font-size:58px;
-  margin-bottom:5px;
-  text-shadow:0 5px 10px rgba(0,0,0,.25);
-}
-
-/* SCORE */
-
-#score{
-  font-size:90px;
-  font-weight:600;
-  margin-bottom:20px;
-
-  text-shadow:
-  0 5px 15px rgba(0,0,0,.25);
-}
-
-/* IMAGE */
-
-#friend{
-  width:320px;
-  max-width:100%;
-
-  border-radius:30px;
-
-  cursor:pointer;
-
-  transition:
-  transform .08s,
-  filter .1s;
-
-  user-select:none;
-  -webkit-user-drag:none;
-
-  box-shadow:
-  0 15px 35px rgba(0,0,0,.35);
-}
-
-#friend:hover{
-  transform:scale(1.03);
-}
-
-#friend:active{
-  transform:scale(.95);
-}
-
-/* POP TEXT */
-
-.pop{
-  position:absolute;
-
-  font-size:42px;
-  font-weight:bold;
-
-  color:#fff;
-
-  text-shadow:
-  0 4px 10px rgba(0,0,0,.35);
-
-  animation:float .6s forwards;
-
-  pointer-events:none;
-}
-
-/* FLOAT ANIM */
-
-@keyframes float{
-
-  0%{
-    opacity:1;
-    transform:
-    translateY(0)
-    scale(1);
-  }
-
-  100%{
-    opacity:0;
-
-    transform:
-    translateY(-90px)
-    scale(1.5);
-  }
-
-}
-
-/* FOOTER */
-
-.hint{
-  margin-top:18px;
-
-  font-size:18px;
-
-  opacity:.9;
-}
-
-/* MOBILE */
-
-@media(max-width:600px){
-
-  h1{
-    font-size:42px;
-  }
-
-  #score{
-    font-size:64px;
-  }
-
-  #friend{
-    width:260px;
-  }
-
-}
-
-</style>
 </head>
+
 <body>
 
-<div class="game-box">
+<div class="top">
 
-  <h1>DOUJIN POP</h1>
+  <div class="logo">
+    DOUJIN POP
+  </div>
 
-  <div id="score">0</div>
+  <div class="leaderboard">
 
-  <!-- รูปปากปิด -->
-  <img src="friend-close.jpg" id="friend">
+    <h2>TOP PLAYERS</h2>
 
-  <div class="hint">
-    TAP THE FACE 🔥
+    <div id="leaderboard">
+      Loading...
+    </div>
+
   </div>
 
 </div>
 
-<script>
+<div id="score">
+  0
+</div>
 
-let score = 0;
+<img src="friend-close.jpg" id="friend">
 
-const friend = document.getElementById("friend");
-const scoreEl = document.getElementById("score");
-
-function pop(x,y){
-
-  score++;
-
-  scoreEl.innerText =
-  score.toLocaleString();
-
-  // รูปอ้าปาก
-  friend.src = "friend-open.png";
-
-  // เด้ง
-  friend.style.transform =
-  "scale(.93)";
-
-  friend.style.filter =
-  "brightness(1.15)";
-
-  setTimeout(()=>{
-
-    friend.style.transform =
-    "scale(1)";
-
-    friend.style.filter =
-    "brightness(1)";
-
-  },80);
-
-  // เสียง POP
-  const ctx =
-  new(window.AudioContext ||
-  window.webkitAudioContext)();
-
-  const osc =
-  ctx.createOscillator();
-
-  const gain =
-  ctx.createGain();
-
-  osc.type = "square";
-
-  osc.frequency.value = 300;
-
-  gain.gain.value = 0.08;
-
-  osc.connect(gain);
-
-  gain.connect(ctx.destination);
-
-  osc.start();
-
-  osc.frequency.exponentialRampToValueAtTime(
-    700,
-    ctx.currentTime + 0.05
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    ctx.currentTime + 0.08
-  );
-
-  osc.stop(ctx.currentTime + 0.08);
-
-  // POP TEXT
-  const text =
-  document.createElement("div");
-
-  text.className = "pop";
-
-  text.innerText = "POP!";
-
-  text.style.left =
-  x + "px";
-
-  text.style.top =
-  y + "px";
-
-  document.body.appendChild(text);
-
-  setTimeout(()=>{
-    text.remove();
-  },600);
-
-  // กลับรูปปิด
-  setTimeout(()=>{
-
-    friend.src =
-    "friend-close.jpg";
-
-  },250);
-
-}
-
-// CLICK
-
-friend.addEventListener(
-"click",(e)=>{
-
-  pop(
-    e.clientX,
-    e.clientY
-  );
-
-});
-
-// SPACEBAR
-
-window.addEventListener(
-"keydown",(e)=>{
-
-  if(e.code === "Space"){
-
-    pop(
-      window.innerWidth/2,
-      window.innerHeight/2
-    );
-
-  }
-
-});
-
-</script>
+<script src="firebase.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
