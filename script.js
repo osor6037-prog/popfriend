@@ -26,7 +26,7 @@ document.getElementById("score");
 const leaderboard =
 document.getElementById("leaderboard");
 
-/* โหลดรูปอ้าปาก */
+/* PRELOAD */
 
 const openImg =
 new Image();
@@ -36,7 +36,7 @@ openImg.src =
 
 let score = 0;
 
-/* โหลดคะแนน */
+/* LOAD SCORE */
 
 db.ref("scores/" + username)
 .once("value")
@@ -63,22 +63,10 @@ function pop(x,y){
   scoreEl.innerText =
   score.toLocaleString();
 
-  /* อ้าปาก */
+  /* OPEN */
 
   friend.src =
   openImg.src;
-
-  friend.style.transform =
-  "scale(.93)";
-
-  setTimeout(()=>{
-
-    friend.style.transform =
-    "scale(1)";
-
-  },80);
-
-  /* กลับปากปิด */
 
   setTimeout(()=>{
 
@@ -87,7 +75,7 @@ function pop(x,y){
 
   },800);
 
-  /* SAVE SCORE */
+  /* SAVE */
 
   db.ref(
     "scores/" + username
@@ -110,9 +98,7 @@ function pop(x,y){
   text.style.top =
   y + "px";
 
-  document.body.appendChild(
-    text
-  );
+  document.body.appendChild(text);
 
   setTimeout(()=>{
 
@@ -158,18 +144,17 @@ db.ref("scores")
 
     html += `
 
-      <div class="player">
+    <div class="player">
 
-        <span>
-          #${i+1}
-          ${x[0]}
-        </span>
+      <span>
+        #${i+1} ${x[0]}
+      </span>
 
-        <span>
-          ${x[1]}
-        </span>
+      <span>
+        ${x[1]}
+      </span>
 
-      </div>
+    </div>
 
     `;
 
