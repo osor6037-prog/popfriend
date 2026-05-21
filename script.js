@@ -34,6 +34,12 @@ new Image();
 openImg.src =
 "friend-open.png";
 
+const closeImg =
+new Image();
+
+closeImg.src =
+"friend-close.jpg";
+
 let score = 0;
 
 /* LOAD SCORE */
@@ -71,9 +77,9 @@ function pop(x,y){
   setTimeout(()=>{
 
     friend.src =
-    "friend-close.jpg";
+    closeImg.src;
 
-  },800);
+  },120);
 
   /* SAVE */
 
@@ -108,14 +114,69 @@ function pop(x,y){
 
 }
 
-/* CLICK */
+/* HOLD CLICK */
+
+let holdInterval;
 
 friend.addEventListener(
-"click",(e)=>{
+"mousedown",(e)=>{
 
   pop(
     e.clientX,
     e.clientY
+  );
+
+  holdInterval =
+  setInterval(()=>{
+
+    pop(
+      e.clientX,
+      e.clientY
+    );
+
+  },80);
+
+});
+
+window.addEventListener(
+"mouseup",()=>{
+
+  clearInterval(
+    holdInterval
+  );
+
+});
+
+/* MOBILE HOLD */
+
+friend.addEventListener(
+"touchstart",(e)=>{
+
+  const touch =
+  e.touches[0];
+
+  pop(
+    touch.clientX,
+    touch.clientY
+  );
+
+  holdInterval =
+  setInterval(()=>{
+
+    pop(
+      touch.clientX,
+      touch.clientY
+    );
+
+  },80);
+
+});
+
+window.addEventListener(
+"touchend",()=>{
+
+  clearInterval(
+    holdInterval
   );
 
 });
