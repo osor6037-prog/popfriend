@@ -20,15 +20,23 @@
 
 <body>
 
-<div class="top">
+<div class="container">
 
-  <div class="logo">
+  <h1>
     DOUJIN POP
+  </h1>
+
+  <div id="score">
+    0
   </div>
 
-  <div class="leaderboard">
+  <!-- LEADERBOARD -->
 
-    <h2>TOP PLAYERS</h2>
+  <div id="rankBox">
+
+    <h2>
+      🏆 TOP PLAYERS
+    </h2>
 
     <div id="leaderboard">
       Loading...
@@ -36,13 +44,18 @@
 
   </div>
 
-</div>
+  <!-- IMAGE -->
 
-<div id="score">
-  0
-</div>
+  <img
+    src="friend-close.jpg"
+    id="friend"
+  >
 
-<img src="friend-close.jpg" id="friend">
+  <p class="tap">
+    TAP THE FACE 🔥
+  </p>
+
+</div>
 
 <script src="firebase.js"></script>
 <script src="script.js"></script>
