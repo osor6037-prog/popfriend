@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pop Friend</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:sans-serif;
+    }
+
+    body{
+      background:#bfe9ff;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      overflow:hidden;
+    }
+
+    h1{
+      font-size:70px;
+      margin-bottom:10px;
+    }
+
+    #score{
+      font-size:80px;
+      font-weight:bold;
+      margin-bottom:20px;
+    }
+
+    .container{
+      position:relative;
+      cursor:pointer;
+    }
+
+    #friend{
+      width:350px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+      transition:.05s;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    #friend.active{
+      transform:scale(.97);
+    }
+
+    /* ปาก */
+    .mouth{
+      position:absolute;
+      width:70px;
+      height:90px;
+      background:black;
+      border-radius:50%;
+      left:50%;
+      top:47%;
+      transform:translate(-50%,-50%) scaleY(0);
+      transition:.05s;
+      overflow:hidden;
+      border:4px solid #222;
+    }
+
+    .mouth::after{
+      content:'';
+      position:absolute;
+      width:45px;
+      height:20px;
+      background:#ff5c8a;
+      bottom:0;
+      left:50%;
+      transform:translateX(-50%);
+      border-radius:50%;
+    }
+
+    .mouth.open{
+      transform:translate(-50%,-50%) scaleY(1);
+    }
+
+    .pop{
+      position:absolute;
+      font-size:40px;
+      font-weight:bold;
+      color:#ff1493;
+      animation:float .6s forwards;
+      pointer-events:none;
+    }
+
+    @keyframes float{
+      0%{
+        opacity:1;
+        transform:translateY(0);
+      }
+      100%{
+        opacity:0;
+        transform:translateY(-80px);
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>POP FRIEND</h1>
+
+  <div id="score">0</div>
+
+  <div class="container" id="container">
+
+    <!-- เปลี่ยนชื่อรูปตรงนี้ -->
+    <img src="friend.jpg" id="friend">
+
+    <div class="mouth" id="mouth"></div>
+
+  </div>
+
+  <script>
+
+    let score = 0;
+
+    const friend = document.getElementById("friend");
+    const scoreEl = document.getElementById("score");
+    const mouth = document.getElementById("mouth");
+    const container = document.getElementById("container");
+
+    function pop(x,y){
+
+      score++;
+      scoreEl.innerText = score;
+
+      friend.classList.add("active");
+      mouth.classList.add("open");
+
+      // เสียง POP
+      const ctx = new(window.AudioContext || window.webkitAudioContext)();
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "square";
+      osc.frequency.value = 300;
+
+      gain.gain.value = 0.1;
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+
+      osc.frequency.exponentialRampToValueAtTime(
+        600,
+        ctx.currentTime + 0.05
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        ctx.currentTime + 0.08
+      );
+
+      osc.stop(ctx.currentTime + 0.08);
+
+      // POP TEXT
+      const text = document.createElement("div");
+
+      text.className = "pop";
+      text.innerText = "POP!";
+      text.style.left = x + "px";
+      text.style.top = y + "px";
+
+      document.body.appendChild(text);
+
+      setTimeout(()=>{
+        text.remove();
+      },600);
+
+      setTimeout(()=>{
+        friend.classList.remove("active");
+        mouth.classList.remove("open");
+      },80);
+
+    }
+
+    container.addEventListener("click",(e)=>{
+      pop(e.clientX,e.clientY);
+    });
+
+    window.addEventListener("keydown",(e)=>{
+      if(e.code === "Space"){
+        pop(window.innerWidth/2,window.innerHeight/2);
+      }
+    });
+
+  </script>
+
+</body>
+</html>
