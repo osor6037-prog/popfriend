@@ -50,6 +50,20 @@ const audioCtx =
 new(window.AudioContext ||
 window.webkitAudioContext)();
 
+/* FIX MOBILE SOUND */
+
+document.addEventListener(
+"click",()=>{
+
+  if(audioCtx.state ===
+  "suspended"){
+
+    audioCtx.resume();
+
+  }
+
+});
+
 function playPopSound(){
 
   const osc =
