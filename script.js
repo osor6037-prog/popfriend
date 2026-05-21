@@ -68,7 +68,48 @@ function pop(x,y){
 
   scoreEl.innerText =
   score.toLocaleString();
+/* SOUND */
 
+const ctx =
+new(window.AudioContext ||
+window.webkitAudioContext)();
+
+const osc =
+ctx.createOscillator();
+
+const gain =
+ctx.createGain();
+
+osc.type =
+"square";
+
+osc.frequency.value =
+300;
+
+gain.gain.value =
+0.05;
+
+osc.connect(gain);
+
+gain.connect(
+  ctx.destination
+);
+
+osc.start();
+
+osc.frequency.exponentialRampToValueAtTime(
+  700,
+  ctx.currentTime + 0.05
+);
+
+gain.gain.exponentialRampToValueAtTime(
+  0.0001,
+  ctx.currentTime + 0.08
+);
+
+osc.stop(
+  ctx.currentTime + 0.08
+);
   /* CHANGE IMAGE */
 
   friend.src =
