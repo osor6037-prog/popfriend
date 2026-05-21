@@ -21,7 +21,7 @@ body{
   justify-content:center;
   align-items:center;
 
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 .container{
@@ -88,6 +88,10 @@ h1{
   box-shadow:
   0 20px 40px rgba(0,0,0,.3);
 
+  image-rendering:auto;
+
+  will-change:transform;
+
 }
 
 #friend:active{
@@ -108,7 +112,7 @@ h1{
 
 #rankBox{
 
-  margin:20px auto;
+  margin:25px auto 0;
 
   width:320px;
 
