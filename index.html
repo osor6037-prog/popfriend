@@ -40,14 +40,10 @@ h1{
   width:350px;
   border-radius:20px;
   cursor:pointer;
-  transition:.05s;
+  transition:0.1s;
   box-shadow:0 10px 30px rgba(0,0,0,.25);
   user-select:none;
   -webkit-user-drag:none;
-}
-
-#friend:active{
-  transform:scale(.97);
 }
 
 .pop{
@@ -96,8 +92,15 @@ function pop(x,y){
   score++;
   scoreEl.innerText = score;
 
-  // เปลี่ยนเป็นรูปอ้าปาก
+  // รูปอ้าปาก
   friend.src = "friend-open.png";
+
+  // เด้งเหมือน Popcat
+  friend.style.transform = "scale(0.95)";
+
+  setTimeout(()=>{
+    friend.style.transform = "scale(1)";
+  },100);
 
   // เสียง POP
   const ctx = new(window.AudioContext || window.webkitAudioContext)();
@@ -142,10 +145,10 @@ function pop(x,y){
     text.remove();
   },600);
 
-  // กลับเป็นปากปิด
+  // กลับเป็นรูปปิด
   setTimeout(()=>{
     friend.src = "friend-close.jpg";
-  },80);
+  },300);
 
 }
 
