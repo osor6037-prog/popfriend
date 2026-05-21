@@ -60,6 +60,7 @@ h1{
 }
 
 @keyframes float{
+
   0%{
     opacity:1;
     transform:translateY(0);
@@ -69,6 +70,7 @@ h1{
     opacity:0;
     transform:translateY(-80px);
   }
+
 }
 
 </style>
@@ -95,7 +97,7 @@ function pop(x,y){
   scoreEl.innerText = score;
 
   // เปลี่ยนเป็นรูปอ้าปาก
-  friend.src = "friend-open.jpg";
+  friend.src = "friend-open.png";
 
   // เสียง POP
   const ctx = new(window.AudioContext || window.webkitAudioContext)();
@@ -130,6 +132,7 @@ function pop(x,y){
 
   text.className = "pop";
   text.innerText = "POP!";
+
   text.style.left = x + "px";
   text.style.top = y + "px";
 
@@ -139,7 +142,7 @@ function pop(x,y){
     text.remove();
   },600);
 
-  // กลับเป็นรูปปากปิด
+  // กลับเป็นปากปิด
   setTimeout(()=>{
     friend.src = "friend-close.jpg";
   },80);
