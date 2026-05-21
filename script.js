@@ -60,7 +60,7 @@ db.ref("scores/" + username)
 
 });
 
-/* POP */
+/* POP FUNCTION */
 
 function pop(x,y){
 
@@ -69,7 +69,7 @@ function pop(x,y){
   scoreEl.innerText =
   score.toLocaleString();
 
-  /* OPEN */
+  /* CHANGE IMAGE */
 
   friend.src =
   openImg.src;
@@ -81,7 +81,7 @@ function pop(x,y){
 
   },120);
 
-  /* SAVE */
+  /* SAVE SCORE */
 
   db.ref(
     "scores/" + username
@@ -114,7 +114,7 @@ function pop(x,y){
 
 }
 
-/* HOLD CLICK */
+/* HOLD CLICK PC */
 
 let holdInterval;
 
@@ -138,6 +138,8 @@ friend.addEventListener(
 
 });
 
+/* RELEASE */
+
 window.addEventListener(
 "mouseup",()=>{
 
@@ -151,6 +153,8 @@ window.addEventListener(
 
 friend.addEventListener(
 "touchstart",(e)=>{
+
+  e.preventDefault();
 
   const touch =
   e.touches[0];
@@ -171,6 +175,8 @@ friend.addEventListener(
   },80);
 
 });
+
+/* MOBILE RELEASE */
 
 window.addEventListener(
 "touchend",()=>{
